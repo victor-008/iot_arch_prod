@@ -1,3 +1,5 @@
+// recconection and history loadings script
+
 async function loadHistory(){
     const res = await fetch("/history");
     const data = await res.json();
