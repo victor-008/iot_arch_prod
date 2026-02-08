@@ -2,7 +2,9 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import asyncio
 
 from app.websocket.manager import manager
+
 from app.mqtt.mqtt_service import start, set_loop
+
 from app.services.data_pipeline import consumer
 from app.database.db import insert_record
 from app.api.routes import router
