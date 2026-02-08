@@ -5,9 +5,9 @@ cursor = conn.cursor()
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS sensor_data(
                id INTEGER PRIMARY KEY AUTOINCREMENT,
+               timestamp TEXT,
                temperature REAL,
-               humidity REAL,
-               timestamp TEXT
+               humidity REAL
                )
                """)
 conn.commit()
