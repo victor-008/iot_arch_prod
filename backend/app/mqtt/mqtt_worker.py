@@ -35,3 +35,27 @@
 #     client.connect(MQTT_BROKER,1883)
 #     client.subscribe(MQTT_TOPIC)
 #     client.loop_start()
+
+
+"""
+Streaming into redis
+"""
+
+import json
+import paho.mqtt.client as mqtt
+import redis
+from app.config import MQTT_BROKER,REDIS_HOST
+
+r=redis.Redis(host=REDIS_HOST)
+
+def on_message(client,userdata,msg):
+    r.xadd("telemetry_stream",{
+        "data":msg.payload.decode()
+    })
+
+def start():
+    c=mqtt.Client()
+    c.on_message=on_message
+    c.connect(MQTT_BROKER,1883)
+    c.subscribe("devices/+/telemetry")
+    c.loop_start()
