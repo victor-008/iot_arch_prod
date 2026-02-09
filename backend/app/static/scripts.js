@@ -30,3 +30,30 @@
 // }
 
 // connectWS();
+
+
+const ctx=document.getElementById('chart');
+
+const chart=new Chart(ctx,{
+type:'line',
+data:{labels:[],datasets:[
+{label:'Temp',data:[]},
+{label:'Humidity',data:[]}
+]}
+});
+
+function connect(){
+const ws=new WebSocket("ws://localhost:8000/ws");
+
+ws.onmessage=(e)=>{
+const d=JSON.parse(e.data);
+chart.data.labels.push(new Date().toLocaleTimeString());
+chart.data.datasets[0].data.push(d.temperature);
+chart.data.datasets[1].data.push(d.humidity);
+chart.update();
+};
+
+ws.onclose=()=>setTimeout(connect,3000);
+}
+
+connect();
