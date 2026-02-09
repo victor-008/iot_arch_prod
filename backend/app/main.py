@@ -57,3 +57,9 @@ async def ws(ws:WebSocket):
             await asyncio.sleep(60)
     except WebSocketDisconnect:
         manager.disconnect(ws)
+
+
+
+
+#how to run >> "docker-compose up --build
+"
