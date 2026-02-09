@@ -27,3 +27,33 @@
 #             await asyncio.sleep(60)
 #     except WebSocketDisconnect:
 #         manager.disconnect(websocket)
+
+
+"""api gateway
+"""
+
+from fastapi import FastAPI,WebSocket,WebSocketDisconnect
+import asyncio
+
+from .mqtt.mqtt_worker import start as mqtt_start
+from .processor.event_processor import run as processor_run
+from .websocket_manager import manager
+from .database import Base,engine
+
+app=FastAPI()
+
+Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+async def startup():
+    mqtt_start()
+    asyncio.create_task(processor_run())
+
+@app.websocket("/ws")
+async def ws(ws:WebSocket):
+    await manager.connect(ws)
+    try:
+        while True:
+            await asyncio.sleep(60)
+    except WebSocketDisconnect:
+        manager.disconnect(ws)
