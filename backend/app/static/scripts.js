@@ -51,9 +51,33 @@ chart.data.labels.push(new Date().toLocaleTimeString());
 chart.data.datasets[0].data.push(d.temperature);
 chart.data.datasets[1].data.push(d.humidity);
 chart.update();
+
+
+document.getElementById('temp-value').innerText =
+    data.temperature + " °C";
+
+document.getElementById('hum-value').innerText =
+    data.humidity + " %";
+
+document.getElementById('timestamp').innerText =
+    new Date().toLocaleTimeString();
+
+document.getElementById('status-indicator').style.background="lime";
+document.getElementById('status-text').innerText="Connected";
+
+
+
+
 };
 
-ws.onclose=()=>setTimeout(connect,3000);
+ws.onclose=()=>{
+    ws.onclose = () => {
+    document.getElementById('status-indicator').style.background="red";
+    document.getElementById('status-text').innerText="Disconnected";
+};
+
+}
+    setTimeout(connect,3000);
 }
 
 connect();
